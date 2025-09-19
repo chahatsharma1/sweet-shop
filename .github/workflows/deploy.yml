@@ -48,10 +48,9 @@ jobs:
         run: docker push asia-south1-docker.pkg.dev/sweet-shop10/sweet-shop-repo/sweet-shop-backend
 
       - name: Deploy to Cloud Run
-        run: |
-          gcloud run deploy sweet-shop-backend \
-            --image asia-south1-docker.pkg.dev/sweet-shop10/sweet-shop-repo/sweet-shop-backend \
-            --platform managed \
-            --region asia-south1 \
-            --allow-unauthenticated \
-            --set-env-vars SPRING_PROFILES_ACTIVE=${{ secrets.SPRING_PROFILES_ACTIVE }},DB_URL=${{ secrets.DB_URL }},DB_USERNAME=${{ secrets.DB_USERNAME }},DB_PASSWORD=${{ secrets.DB_PASSWORD }},FRONTEND_URL=${{ secrets.FRONTEND_URL }},SERVER_PORT=${{ secrets.SERVER_PORT }},JWT_SECRET=${{ secrets.JWT_SECRET }},JWT_EXPIRATION=${{ secrets.JWT_EXPIRATION }}
+        run: gcloud run deploy sweet-shop-backend \
+              --image asia-south1-docker.pkg.dev/sweet-shop10/sweet-shop-repo/sweet-shop-backend:latest \
+              --platform managed \
+              --region asia-south1 \
+              --allow-unauthenticated \
+              --set-env-vars "SPRING_PROFILES_ACTIVE=${{ secrets.SPRING_PROFILES_ACTIVE}},DB_URL=${{ secrets.DB_URL}},DB_USERNAME=${{ secrets.DB_USERNAME}},DB_PASSWORD=${{ secrets.DB_PASSWORD}},FRONTEND_URL=${{ secrets.FRONTEND_URL}},SERVER_PORT=${{ secrets.SERVER_PORT}},JWT_SECRET=${{ secrets.JWT_SECRET}},JWT_EXPIRATION=${{ secrets.JWT_EXPIRATION }}"
