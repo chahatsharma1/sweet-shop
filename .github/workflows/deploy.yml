@@ -42,15 +42,15 @@ jobs:
           gcloud config set run/region asia-south1
 
       - name: Build Docker Image
-        run: docker build --platform=linux/amd64 -t gcr.io/sweet-shop10/sweet-shop-backend .
+        run: docker build --platform=linux/amd64 -t asia-south1-docker.pkg.dev/sweet-shop10/sweet-shop-repo/sweet-shop-backend .
 
-      - name: Push Docker Image to Container Registry
-        run: docker push gcr.io/sweet-shop10/sweet-shop-backend
+      - name: Push Docker Image to Artifact Registry
+        run: docker push asia-south1-docker.pkg.dev/sweet-shop10/sweet-shop-repo/sweet-shop-backend
 
       - name: Deploy to Cloud Run
         run: |
           gcloud run deploy sweet-shop-backend \
-            --image gcr.io/sweet-shop10/sweet-shop-backend \
+            --image asia-south1-docker.pkg.dev/sweet-shop10/sweet-shop-repo/sweet-shop-backend \
             --platform managed \
             --region asia-south1 \
             --allow-unauthenticated \
