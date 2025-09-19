@@ -34,7 +34,7 @@ jobs:
           credentials_json: ${{ secrets.GCP_SA_KEY }}
 
       - name: Configure Docker for Google Cloud
-        run: gcloud auth configure-docker
+        run: gcloud auth configure-docker asia-south1-docker.pkg.dev
 
       - name: Set GCP project and region
         run: |
