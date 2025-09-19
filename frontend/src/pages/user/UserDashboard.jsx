@@ -37,7 +37,7 @@ const SweetCard = ({ sweet }) => {
     const isLowStock = sweet?.quantity > 0 && sweet?.quantity <= 10;
 
     return (
-        <Card className="flex flex-col overflow-hidden shadow-lg border-border/20 transition-all duration-300 hover:shadow-xl hover:scale-[1.02]">
+        <Card className="flex flex-col overflow-hidden shadow-lg border-border transition-all duration-300 hover:shadow-xl hover:scale-[1.02]">
             <div className="p-4 flex-grow flex flex-col">
                 <CardHeader className="p-0 mb-2">
                     <CardTitle className="text-xl font-serif">{sweet?.name}</CardTitle>
@@ -168,7 +168,7 @@ const UserDashboard = () => {
         <div className="bg-background text-foreground min-h-screen">
             <Toaster position="top-center" />
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-                <form onSubmit={handleSearch} className="flex flex-col md:flex-row justify-between items-center gap-4 mb-8">
+                <div className="flex flex-col md:flex-row justify-between items-center gap-4 mb-8">
                     <div>
                         <h1 className="text-3xl font-bold font-serif">Our Delicious Sweets</h1>
                     </div>
@@ -188,57 +188,59 @@ const UserDashboard = () => {
                                 </Button>
                             </PopoverTrigger>
                             <PopoverContent className="w-80" align="end">
-                                <div className="grid gap-4">
-                                    <div className="space-y-2">
-                                        <h4 className="font-medium leading-none">Filters</h4>
-                                        <p className="text-sm text-muted-foreground">
-                                            Refine your search results.
-                                        </p>
-                                    </div>
-                                    <div className="grid gap-2">
-                                        <div className="space-y-1">
-                                            <label className="text-xs font-medium">Category</label>
-                                            <Select onValueChange={(value) => handleSelectChange("category", value)} value={filters.category || "all"}>
-                                                <SelectTrigger><SelectValue/></SelectTrigger>
-                                                <SelectContent>
-                                                    <SelectItem value="all">All Categories</SelectItem>
-                                                    {categoryOptions.map((cat) => <SelectItem key={cat} value={cat}>{cat}</SelectItem>)}
-                                                </SelectContent>
-                                            </Select>
+                                <form onSubmit={handleSearch}>
+                                    <div className="grid gap-4">
+                                        <div className="space-y-2">
+                                            <h4 className="font-medium leading-none">Filters</h4>
+                                            <p className="text-sm text-muted-foreground">
+                                                Refine your search results.
+                                            </p>
                                         </div>
-                                        <div className="grid grid-cols-2 gap-2">
+                                        <div className="grid gap-2">
                                             <div className="space-y-1">
-                                                <label className="text-xs font-medium">Min Price</label>
-                                                <Select onValueChange={(value) => handleSelectChange("minPrice", value)} value={filters.minPrice || "any"}>
+                                                <label className="text-xs font-medium">Category</label>
+                                                <Select onValueChange={(value) => handleSelectChange("category", value)} value={filters.category || "all"}>
                                                     <SelectTrigger><SelectValue/></SelectTrigger>
                                                     <SelectContent>
-                                                        <SelectItem value="any">Any</SelectItem>
-                                                        {priceOptions.map((price) => <SelectItem key={price} value={String(price)}>₹{price}</SelectItem>)}
+                                                        <SelectItem value="all">All Categories</SelectItem>
+                                                        {categoryOptions.map((cat) => <SelectItem key={cat} value={cat}>{cat}</SelectItem>)}
                                                     </SelectContent>
                                                 </Select>
                                             </div>
-                                            <div className="space-y-1">
-                                                <label className="text-xs font-medium">Max Price</label>
-                                                <Select onValueChange={(value) => handleSelectChange("maxPrice", value)} value={filters.maxPrice || "any"}>
-                                                    <SelectTrigger><SelectValue/></SelectTrigger>
-                                                    <SelectContent>
-                                                        <SelectItem value="any">Any</SelectItem>
-                                                        {priceOptions.map((price) => <SelectItem key={price} value={String(price)}>₹{price}</SelectItem>)}
-                                                    </SelectContent>
-                                                </Select>
+                                            <div className="grid grid-cols-2 gap-2">
+                                                <div className="space-y-1">
+                                                    <label className="text-xs font-medium">Min Price</label>
+                                                    <Select onValueChange={(value) => handleSelectChange("minPrice", value)} value={filters.minPrice || "any"}>
+                                                        <SelectTrigger><SelectValue/></SelectTrigger>
+                                                        <SelectContent>
+                                                            <SelectItem value="any">Any</SelectItem>
+                                                            {priceOptions.map((price) => <SelectItem key={price} value={String(price)}>₹{price}</SelectItem>)}
+                                                        </SelectContent>
+                                                    </Select>
+                                                </div>
+                                                <div className="space-y-1">
+                                                    <label className="text-xs font-medium">Max Price</label>
+                                                    <Select onValueChange={(value) => handleSelectChange("maxPrice", value)} value={filters.maxPrice || "any"}>
+                                                        <SelectTrigger><SelectValue/></SelectTrigger>
+                                                        <SelectContent>
+                                                            <SelectItem value="any">Any</SelectItem>
+                                                            {priceOptions.map((price) => <SelectItem key={price} value={String(price)}>₹{price}</SelectItem>)}
+                                                        </SelectContent>
+                                                    </Select>
+                                                </div>
                                             </div>
+                                            {priceError && <p className="text-destructive text-xs font-semibold text-center">{priceError}</p>}
                                         </div>
-                                        {priceError && <p className="text-destructive text-xs font-semibold text-center">{priceError}</p>}
+                                        <div className="flex justify-end gap-2 pt-2">
+                                            <Button type="button" variant="outline" size="sm" onClick={clearFilters}>Clear</Button>
+                                            <Button type="submit" size="sm">Apply</Button>
+                                        </div>
                                     </div>
-                                    <div className="flex justify-end gap-2 pt-2">
-                                        <Button type="button" variant="outline" size="sm" onClick={clearFilters}>Clear</Button>
-                                        <Button type="submit" size="sm">Apply</Button>
-                                    </div>
-                                </div>
+                                </form>
                             </PopoverContent>
                         </Popover>
                     </div>
-                </form>
+                </div>
 
                 {isLoading && <div className="flex justify-center my-8"><Loader2 className="h-10 w-10 animate-spin text-primary" /></div>}
                 {error && <p className="text-center text-destructive font-semibold">{error}</p>}

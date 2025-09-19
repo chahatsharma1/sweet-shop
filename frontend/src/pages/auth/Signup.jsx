@@ -1,31 +1,25 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { register, clearAuthError } from "@/state/auth/Action.js";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { AlertCircle, Loader2, Eye, EyeOff } from "lucide-react";
+import { AlertCircle, Loader2, Eye, EyeOff, Info } from "lucide-react";
+import {Toaster} from "react-hot-toast";
 
 const Signup = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
-    const { isLoading, error, jwt } = useSelector(store => store.auth);
+    const { isLoading, error } = useSelector(store => store.auth);
 
     const [formData, setFormData] = useState({
-        fullName: "",
         email: "",
         password: "",
     });
     const [showPassword, setShowPassword] = useState(false);
-
-    useEffect(() => {
-        if (jwt) {
-            navigate("/");
-        }
-    }, [jwt, navigate]);
 
     useEffect(() => {
         return () => {
@@ -43,17 +37,18 @@ const Signup = () => {
     const handleSubmit = (e) => {
         e.preventDefault();
         if (isLoading) return;
-        dispatch(register(formData));
+        dispatch(register(formData, navigate));
     };
 
     return (
-        <div className="bg-slate-50 dark:bg-background text-foreground flex justify-center p-4 pt-28 sm:pt-28 font-outfit">
+        <div className="bg-background dark:bg-background text-foreground flex flex-col items-center gap-8 p-4 pt-14 sm:pt-14 font-outfit">
+            <Toaster position="top-center" />
             <motion.div
                 initial={{ opacity: 0, y: -20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5 }}
                 className="w-full max-w-md">
-                <Card className="shadow-lg border-border/20">
+                <Card className="shadow-lg border-border">
                     <CardHeader className="text-center">
                         <CardTitle className="text-3xl font-bold">Create an Account</CardTitle>
                         <CardDescription>Enter your details below to get started.</CardDescription>
@@ -113,9 +108,29 @@ const Signup = () => {
                                 {isLoading ? "Creating Account..." : "Create Account"}
                             </Button>
                         </form>
+                        <div className="mt-4 text-center text-sm">
+                            Already have an account?{" "}
+                            <Link to="/login" className="underline font-semibold hover:text-primary">
+                                Login
+                            </Link>
+                        </div>
                     </CardContent>
                 </Card>
             </motion.div>
+
+            <div className="max-w-md w-full flex items-start gap-3 p-4 rounded-lg bg-muted/50 border border-border">
+                <Info className="h-5 w-5 text-primary flex-shrink-0 mt-0.5" />
+                <div>
+                    <p className="font-semibold text-foreground">For the people of Incubyte: </p>
+                    <p className="text-sm text-muted-foreground">
+                        To quickly test the application, please use the demo credentials available on the{" "}
+                        <Link to="/login" className="underline font-medium hover:text-primary">
+                            Login
+                        </Link>
+                        {" "}page. You are also welcome to register a new account.
+                    </p>
+                </div>
+            </div>
         </div>
     );
 };

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { login, clearAuthError } from "@/state/auth/Action.js";
 import { Button } from '@/components/ui/button';
@@ -8,7 +8,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { AlertCircle, Loader2, Eye, EyeOff } from 'lucide-react';
+import { AlertCircle, Loader2, Eye, EyeOff, Info } from 'lucide-react';
 
 const Login = () => {
     const dispatch = useDispatch();
@@ -20,7 +20,7 @@ const Login = () => {
         email: '',
         password: '',
     });
-    const [selectedRole, setSelectedRole] = useState('ROLE_USER');
+    const [selectedRole, setSelectedRole] = useState('USER');
     const [showPassword, setShowPassword] = useState(false);
 
     useEffect(() => {
@@ -46,13 +46,13 @@ const Login = () => {
     const togglePasswordVisibility = () => setShowPassword(!showPassword);
 
     return (
-        <div className="bg-slate-50 dark:bg-background text-foreground flex justify-center p-4 pt-24 sm:pt-24 font-outfit">
+        <div className="bg-background dark:bg-background text-foreground flex flex-col items-center gap-8 p-4 pt-14 sm:pt-14 font-outfit">
             <motion.div
                 initial={{ opacity: 0, y: -20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5 }}
                 className="w-full max-w-md">
-                <Card className="shadow-lg border-border/20">
+                <Card className="shadow-lg border-border">
                     <CardHeader className="text-center">
                         <CardTitle className="text-3xl font-bold">Welcome Back</CardTitle>
                         <CardDescription>Select your role and sign in to your account.</CardDescription>
@@ -117,11 +117,40 @@ const Login = () => {
                                 {isLoading ? 'Signing in...' : 'Sign In'}
                             </Button>
                         </form>
+                        <div className="mt-4 text-center text-sm">
+                            Don't have an account?{" "}
+                            <Link to="/register" className="underline font-semibold hover:text-primary">
+                                Sign up
+                            </Link>
+                        </div>
                     </CardContent>
                 </Card>
             </motion.div>
+
+            <div className="max-w-md w-full flex items-start gap-3 p-4 rounded-lg bg-muted/50 border border-border">
+                <Info className="h-5 w-5 text-primary flex-shrink-0 mt-0.5" />
+                <div>
+                    <p className="font-semibold text-foreground">A Note for the Incubyte Team:</p>
+                    <p className="text-sm text-muted-foreground mb-3">
+                        For better security, admin accounts can only be created by another admin. Please use the demo credentials below and you are most welcome to create a new account.
+                    </p>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-1 text-sm">
+                        <div>
+                            <p className="font-medium text-foreground">User Credentials:</p>
+                            <p className="text-muted-foreground ">Email: <span className="font-mono">demo@sweetshop.com</span></p>
+                            <p className="text-muted-foreground">Password: <span className="font-mono">demo123</span></p>
+                        </div>
+                        <div className="mt-2 sm:mt-0">
+                            <p className="font-medium text-foreground">Admin Credentials:</p>
+                            <p className="text-muted-foreground">Email: <span className="font-mono">admin@sweetshop.com</span></p>
+                            <p className="text-muted-foreground">Password: <span className="font-mono">admin123</span></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     );
 };
 
 export default Login;
+

@@ -42,9 +42,10 @@ import {
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { SweetForm } from '@/pages/admin/SweetForm.jsx';
-import { Loader2, MoreHorizontal, PlusCircle } from 'lucide-react';
+import {Eye, EyeOff, Loader2, MoreHorizontal, PlusCircle, UserPlus} from 'lucide-react';
 import { Toaster } from 'react-hot-toast';
 import { Card } from "@/components/ui/card.jsx";
+import {createAdmin} from "@/state/Auth/Action.js";
 
 const AdminDashboard = () => {
     const dispatch = useDispatch();
@@ -53,10 +54,14 @@ const AdminDashboard = () => {
     const [isFormOpen, setIsFormOpen] = useState(false);
     const [isRestockOpen, setIsRestockOpen] = useState(false);
     const [isDeleteAlertOpen, setIsDeleteAlertOpen] = useState(false);
+    const [isAdminFormOpen, setIsAdminFormOpen] = useState(false);
     const [selectedSweet, setSelectedSweet] = useState(null);
     const [restockQuantity, setRestockQuantity] = useState(1);
     const [searchTerm, setSearchTerm] = useState("");
     const [filteredSweets, setFilteredSweets] = useState([]);
+    const [adminFormData, setAdminFormData] = useState({ email: '', password: '' });
+    const [showPassword, setShowPassword] = useState(false);
+    const togglePasswordVisibility = () => setShowPassword(!showPassword);
 
     useEffect(() => {
         dispatch(getAllSweets());
@@ -95,6 +100,17 @@ const AdminDashboard = () => {
         setIsRestockOpen(true);
     };
 
+    const handleAddAdmin = (e) => {
+        e.preventDefault();
+        dispatch(createAdmin(adminFormData))
+        setIsAdminFormOpen(false);
+        setAdminFormData({ email: '', password: '' });
+    };
+
+    const handleAdminFormChange = (e) => {
+        setAdminFormData({ ...adminFormData, [e.target.name]: e.target.value });
+    };
+
     const confirmDelete = () => {
         if (selectedSweet) {
             dispatch(deleteSweet(selectedSweet.id));
@@ -126,9 +142,13 @@ const AdminDashboard = () => {
                         onChange={(e) => setSearchTerm(e.target.value)}
                         className="w-full md:w-64"
                     />
+                    <Button onClick={() => setIsAdminFormOpen(true)} variant="outline" className="shrink-0">
+                        <UserPlus className="h-4 w-4 mr-2" />
+                        Add Admin
+                    </Button>
                     <Button onClick={handleAddClick} className="shrink-0">
                         <PlusCircle className="h-4 w-4 mr-2" />
-                        Add New Sweet
+                        Add Sweet
                     </Button>
                 </div>
             </header>
@@ -217,6 +237,58 @@ const AdminDashboard = () => {
                         />
                     </div>
                     <Button onClick={confirmRestock}>Confirm Restock</Button>
+                </DialogContent>
+            </Dialog>
+
+            <Dialog open={isAdminFormOpen} onOpenChange={setIsAdminFormOpen}>
+                <DialogContent className="sm:max-w-[425px]">
+                    <DialogHeader>
+                        <DialogTitle>Create New Admin</DialogTitle>
+                        <DialogDescription>
+                            Enter the email and a password for the new admin account.
+                        </DialogDescription>
+                    </DialogHeader>
+                    <form onSubmit={handleAddAdmin} className="space-y-4 py-2">
+                        <div className="space-y-2">
+                            <Label htmlFor="email">Admin Email</Label>
+                            <Input
+                                id="email"
+                                name="email"
+                                type="email"
+                                placeholder="admin@example.com"
+                                value={adminFormData.email}
+                                onChange={handleAdminFormChange}
+                                required
+                            />
+                        </div>
+                        <div className="space-y-2">
+                            <Label htmlFor="password">Password</Label>
+                            <div className="relative">
+                                <Input
+                                    id="password"
+                                    type={showPassword ? 'text' : 'password'}
+                                    name="password"
+                                    placeholder="••••••••"
+                                    value={adminFormData.password}
+                                    onChange={handleAdminFormChange}
+                                    required
+                                />
+                                <Button
+                                    type="button"
+                                    variant="ghost"
+                                    size="icon"
+                                    className="absolute inset-y-0 right-0 h-full px-3 text-muted-foreground"
+                                    onClick={togglePasswordVisibility}
+                                    aria-label={showPassword ? "Hide password" : "Show password"}
+                                >
+                                    {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                                </Button>
+                            </div>
+                        </div>
+                        <div className="pt-2">
+                            <Button type="submit" className="w-full">Create Admin</Button>
+                        </div>
+                    </form>
                 </DialogContent>
             </Dialog>
 
