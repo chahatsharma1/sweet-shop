@@ -42,10 +42,10 @@ import {
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { SweetForm } from '@/pages/admin/SweetForm.jsx';
-import {Eye, EyeOff, Loader2, MoreHorizontal, PlusCircle, UserPlus} from 'lucide-react';
+import { Eye, EyeOff, Loader2, MoreHorizontal, PlusCircle, UserPlus } from 'lucide-react';
 import { Toaster } from 'react-hot-toast';
 import { Card } from "@/components/ui/card.jsx";
-import {createAdmin} from "@/state/Auth/Action.js";
+import { createAdmin } from "@/state/Auth/Action.js";
 
 const AdminDashboard = () => {
     const dispatch = useDispatch();
@@ -102,13 +102,20 @@ const AdminDashboard = () => {
 
     const handleAddAdmin = (e) => {
         e.preventDefault();
-        dispatch(createAdmin(adminFormData))
+        dispatch(createAdmin(adminFormData));
         setIsAdminFormOpen(false);
-        setAdminFormData({ email: '', password: '' });
     };
 
     const handleAdminFormChange = (e) => {
         setAdminFormData({ ...adminFormData, [e.target.name]: e.target.value });
+    };
+
+    const handleAdminFormOpenChange = (isOpen) => {
+        setIsAdminFormOpen(isOpen);
+        if (!isOpen) {
+            setAdminFormData({ email: '', password: '' });
+            setShowPassword(false);
+        }
     };
 
     const confirmDelete = () => {
@@ -187,7 +194,7 @@ const AdminDashboard = () => {
                                                 {sweet.quantity === 0 && (
                                                     <DropdownMenuItem onClick={() => handleRestockClick(sweet)}>Restock</DropdownMenuItem>
                                                 )}
-                                                <DropdownMenuItem onClick={() => handleDeleteClick(sweet)} className="text-destructive">Delete</DropdownMenuItem>
+                                                <DropdownMenuItem onClick={() => handleDeleteClick(sweet)} className="text-red-700">Delete</DropdownMenuItem>
                                             </DropdownMenuContent>
                                         </DropdownMenu>
                                     </TableCell>
@@ -240,7 +247,7 @@ const AdminDashboard = () => {
                 </DialogContent>
             </Dialog>
 
-            <Dialog open={isAdminFormOpen} onOpenChange={setIsAdminFormOpen}>
+            <Dialog open={isAdminFormOpen} onOpenChange={handleAdminFormOpenChange}>
                 <DialogContent className="sm:max-w-[425px]">
                     <DialogHeader>
                         <DialogTitle>Create New Admin</DialogTitle>
@@ -279,8 +286,7 @@ const AdminDashboard = () => {
                                     size="icon"
                                     className="absolute inset-y-0 right-0 h-full px-3 text-muted-foreground"
                                     onClick={togglePasswordVisibility}
-                                    aria-label={showPassword ? "Hide password" : "Show password"}
-                                >
+                                    aria-label={showPassword ? "Hide password" : "Show password"}>
                                     {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                                 </Button>
                             </div>
