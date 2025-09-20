@@ -28,13 +28,16 @@ jobs:
       - name: Build with Maven
         run: mvn clean package -DskipTests --file pom.xml
 
+      - name: Verify JAR built
+        run: ls -lh target
+
       - name: Set up Google Cloud CLI
         uses: google-github-actions/auth@v2
         with:
           credentials_json: ${{ secrets.GCP_SA_KEY }}
 
       - name: Configure Docker for Google Cloud
-        run: gcloud auth configure-docker asia-south1-docker.pkg.dev
+        run: gcloud auth configure-docker gcr.io
 
       - name: Set GCP project and region
         run: |
@@ -42,10 +45,16 @@ jobs:
           gcloud config set run/region asia-south1
 
       - name: Build Docker Image
-        run: docker build -t asia-south1-docker.pkg.dev/sweet-shop10/sweet-shop-repo/sweet-shop-backend:latest .
+        run: docker build -t gcr.io/sweet-shop10/sweetshop:latest .
 
-      - name: Push Docker Image to Artifact Registry
-        run: docker push asia-south1-docker.pkg.dev/sweet-shop10/sweet-shop-repo/sweet-shop-backend:latest
+      - name: Push Docker Image to GCR
+        run: docker push gcr.io/sweet-shop10/sweetshop:latest
 
       - name: Deploy to Cloud Run
-        run: gcloud run deploy sweet-shop-backend --image asia-south1-docker.pkg.dev/sweet-shop10/sweet-shop-repo/sweet-shop-backend:latest --platform managed --region asia-south1 --allow-unauthenticated --set-env-vars "SPRING_PROFILES_ACTIVE=${{ secrets.SPRING_PROFILES_ACTIVE}},DB_URL=${{ secrets.DB_URL}},DB_USERNAME=${{ secrets.DB_USERNAME}},DB_PASSWORD=${{ secrets.DB_PASSWORD}},FRONTEND_URL=${{ secrets.FRONTEND_URL}},SERVER_PORT=${{ secrets.SERVER_PORT}},JWT_SECRET=${{ secrets.JWT_SECRET}},JWT_EXPIRATION=${{ secrets.JWT_EXPIRATION }}"
+        run: |
+          gcloud run deploy sweet-shop-backend \
+            --image gcr.io/sweet-shop10/sweetshop:latest \
+            --platform managed \
+            --region asia-south1 \
+            --allow-unauthenticated \
+            --set-env-vars SPRING_PROFILES_ACTIVE=${{ secrets.SPRING_PROFILES_ACTIVE }},DB_URL=${{ secrets.DB_URL }},DB_USERNAME=${{ secrets.DB_USERNAME }},DB_PASSWORD=${{ secrets.DB_PASSWORD }},FRONTEND_URL=${{ secrets.FRONTEND_URL }},SERVER_PORT=${{ secrets.SERVER_PORT }},JWT_SECRET=${{ secrets.JWT_SECRET }},JWT_EXPIRATION=${{ secrets.JWT_EXPIRATION }}
