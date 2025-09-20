@@ -4,9 +4,11 @@ import { useDispatch } from 'react-redux';
 import { Button } from "@/components/ui/button";
 import { Candy, Sun, Moon } from "lucide-react";
 import { logout } from "@/state/auth/Action.js";
+import { jwtDecode } from 'jwt-decode';
 
 const Layout = () => {
     const jwt = localStorage.getItem("jwt");
+    const [userRole, setUserRole] = useState(null);
 
     const location = useLocation();
     const navigate = useNavigate();
@@ -15,6 +17,15 @@ const Layout = () => {
     const [theme, setTheme] = useState(() => {
         return localStorage.getItem('theme') || 'light';
     });
+
+    useEffect(() => {
+        if (jwt) {
+            try {
+                const decodedToken = jwtDecode(jwt);
+                setUserRole(decodedToken.role);
+            } catch {}
+        }
+    }, [jwt]);
 
     useEffect(() => {
         const root = window.document.documentElement;
@@ -55,10 +66,10 @@ const Layout = () => {
 
                             {jwt ? (
                                 <>
-                                    {location.pathname === '/dashboard' || location.pathname === '/admin/dashboard'  ? (
+                                    {location.pathname.includes('dashboard') ? (
                                         <Button size="sm" onClick={handleLogout}>Logout</Button>
                                     ) : (
-                                        <Link to="/dashboard">
+                                        <Link to={userRole === 'ADMIN' ? '/admin/dashboard' : '/dashboard'}>
                                             <Button size="sm">Dashboard</Button>
                                         </Link>
                                     )}
