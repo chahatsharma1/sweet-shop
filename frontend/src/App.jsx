@@ -8,6 +8,7 @@ import UserDashboard from "@/pages/user/UserDashboard.jsx";
 import AdminDashboard from "@/pages/admin/AdminDashboard.jsx";
 import ScrollToTop from "@/components/ScrollToTop.jsx";
 import ProtectedRoute from "@/components/ProtectedRoute.jsx";
+import UnauthorizedPage from "@/pages/UnauthorizedPage.jsx";
 
 function App() {
     return (
@@ -18,6 +19,7 @@ function App() {
                     <Route index element={<HomePage />} />
                     <Route path="/register" element={<Signup />} />
                     <Route path="/login" element={<Login />} />
+                    <Route path="/error" element={<UnauthorizedPage />} />
 
                     <Route
                         path="/dashboard"
