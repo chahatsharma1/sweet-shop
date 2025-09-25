@@ -20,9 +20,6 @@ target/
 !src/main/resources/static/
 !src/main/resources/templates/
 
-# Maven
-.mvn/wrapper/maven-wrapper.jar
-.mvn/wrapper/maven-wrapper.properties
 .settings/
 dependency-reduced-pom.xml
 
