@@ -41,7 +41,6 @@ frontend/dist
 # local env files
 .env
 frontend/.env.production
-application-prod.properties
 
 # vite
 .vite/
