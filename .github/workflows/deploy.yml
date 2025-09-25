@@ -28,14 +28,6 @@ jobs:
       - name: Build with Maven
         run: mvn clean package -DskipTests --file pom.xml
 
-      - name: Inspect JAR contents
-        run: |
-         jar tf target/sweetshop-0.0.1-SNAPSHOT.jar | grep postgresql || echo "PostgreSQL driver not found!"
-
-
-      - name: Verify JAR built
-        run: ls -lh target
-
       - name: Set up Google Cloud CLI
         uses: google-github-actions/auth@v2
         with:
