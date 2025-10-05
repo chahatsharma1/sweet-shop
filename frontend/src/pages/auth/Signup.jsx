@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, Link } from "react-router-dom";
-import { motion } from "framer-motion";
+import { motion as Motion } from "framer-motion";
 import { register, clearAuthError } from "@/state/auth/Action.js";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -43,7 +43,7 @@ const Signup = () => {
     return (
         <div className="bg-background dark:bg-background text-foreground flex flex-col items-center gap-8 p-4 pt-14 sm:pt-14 font-outfit">
             <Toaster position="top-center" />
-            <motion.div
+            <Motion.div
                 initial={{ opacity: 0, y: -20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5 }}
@@ -93,14 +93,13 @@ const Signup = () => {
                             </div>
 
                             {error && (
-                                <motion.div
+                                <Motion.div
                                     initial={{ opacity: 0, y: -10 }}
                                     animate={{ opacity: 1, y: 0 }}
-                                    className="bg-destructive/10 text-destructive text-sm font-medium p-3 rounded-md flex items-center gap-2"
-                                >
+                                    className="bg-destructive/10 text-destructive text-sm font-medium p-3 rounded-md flex items-center gap-2">
                                     <AlertCircle className="h-4 w-4" />
                                     {error}
-                                </motion.div>
+                                </Motion.div>
                             )}
 
                             <Button type="submit" className="w-full" disabled={isLoading}>
@@ -116,18 +115,13 @@ const Signup = () => {
                         </div>
                     </CardContent>
                 </Card>
-            </motion.div>
+            </Motion.div>
 
             <div className="max-w-md w-full flex items-start gap-3 p-4 rounded-lg bg-muted/50 border border-border">
                 <Info className="h-5 w-5 text-primary flex-shrink-0 mt-0.5" />
                 <div>
-                    <p className="font-semibold text-foreground">For the people of Incubyte: </p>
-                    <p className="text-sm text-muted-foreground">
-                        To quickly test the application, please use the demo credentials available on the{" "}
-                        <Link to="/login" className="underline font-medium hover:text-primary">
-                            Login
-                        </Link>
-                        {" "}page. You are also welcome to register a new account.
+                    <p className="font-medium text-foreground">
+                        Please note: The server may take up to 60 seconds to start when idle. Thank you for your patience!
                     </p>
                 </div>
             </div>

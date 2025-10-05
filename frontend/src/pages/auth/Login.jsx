@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
-import { motion } from 'framer-motion';
+import { motion as Motion } from 'framer-motion';
 import { login, clearAuthError } from "@/state/auth/Action.js";
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -47,7 +47,7 @@ const Login = () => {
 
     return (
         <div className="bg-background dark:bg-background text-foreground flex flex-col items-center gap-8 p-4 pt-14 sm:pt-14 font-outfit">
-            <motion.div
+            <Motion.div
                 initial={{ opacity: 0, y: -20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5 }}
@@ -103,14 +103,14 @@ const Login = () => {
                                 </div>
                             </div>
                             {error && (
-                                <motion.div
+                                <Motion.div
                                     initial={{ opacity: 0, y: -10 }}
                                     animate={{ opacity: 1, y: 0 }}
                                     className="bg-destructive/10 text-destructive text-sm font-medium p-3 rounded-md flex items-center gap-2"
                                 >
                                     <AlertCircle className="h-4 w-4" />
                                     {error}
-                                </motion.div>
+                                </Motion.div>
                             )}
                             <Button type="submit" className="w-full" disabled={isLoading}>
                                 {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
@@ -125,27 +125,14 @@ const Login = () => {
                         </div>
                     </CardContent>
                 </Card>
-            </motion.div>
+            </Motion.div>
 
             <div className="max-w-md w-full flex items-start gap-3 p-4 rounded-lg bg-muted/50 border border-border">
                 <Info className="h-5 w-5 text-primary flex-shrink-0 mt-0.5" />
                 <div>
-                    <p className="font-semibold text-foreground">A Note for the Incubyte Team:</p>
-                    <p className="text-sm text-muted-foreground mb-3">
-                        For better security, admin accounts can only be created by another admin. Please use the demo credentials below and you are most welcome to create a new account.
+                    <p className="font-medium text-foreground">
+                        The server may take up to 60 seconds to start when inactive. Thanks for your patience!
                     </p>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-1 text-sm">
-                        <div>
-                            <p className="font-medium text-foreground">User Credentials:</p>
-                            <p className="text-muted-foreground ">Email: <span className="font-mono">demo@sweetshop.com</span></p>
-                            <p className="text-muted-foreground">Password: <span className="font-mono">demo123</span></p>
-                        </div>
-                        <div className="mt-2 sm:mt-0">
-                            <p className="font-medium text-foreground">Admin Credentials:</p>
-                            <p className="text-muted-foreground">Email: <span className="font-mono">admin@sweetshop.com</span></p>
-                            <p className="text-muted-foreground">Password: <span className="font-mono">admin123</span></p>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>
@@ -153,4 +140,3 @@ const Login = () => {
 };
 
 export default Login;
-
